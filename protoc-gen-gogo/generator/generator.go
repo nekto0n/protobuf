@@ -2082,6 +2082,9 @@ func (g *Generator) generateMessage(message *Descriptor) {
 		fieldName, fieldGetterName := ns[0], ns[1]
 		typename, wiretype := g.GoType(message, field)
 		jsonName := *field.Name
+		if gogoproto.IsCamelCaseJsonTag(g.file.FileDescriptorProto, message.DescriptorProto) {
+			jsonName = field.GetJsonName()
+		}
 		jsonTag := jsonName + ",omitempty"
 		repeatedNativeType := (!field.IsMessage() && !gogoproto.IsCustomType(field) && field.IsRepeated())
 		if !gogoproto.IsNullable(field) && !repeatedNativeType {
